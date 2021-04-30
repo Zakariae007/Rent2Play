@@ -20,7 +20,7 @@ const CourtSchema = new Schema({
         type: String,
         required: [true, 'name field is required.']
     },
-    type: {
+    courtType: {
         type: String
     },
     available: {
@@ -31,6 +31,34 @@ const CourtSchema = new Schema({
         type: String,
         required: [true, 'sport is required.']
     },
+    website: {
+        type: String
+    },
+    phoneNumber: {
+        type: Number
+    },
+    type: {
+        type: String,
+    },
+    numberOfCourt: {
+        type: Number
+    },
+    price: {
+        type: Number
+    },
+    onlineBooking: {
+        type: Boolean
+    },
+    rentingInventory: {
+        type: Boolean
+    },
+    coaches: {
+        type: Boolean
+    },
+    workingHours: {
+        
+    },
+
     // Add in Geolocation
     geometry: GeoSchema
 });
