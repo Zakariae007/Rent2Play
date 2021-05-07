@@ -1,39 +1,71 @@
 const User = require('../modules/user');
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
+// Handle Errors 
+
+const handleErrors = (err) => {
+    console.log(err.message, err.code);
+    let errors = {
+        firstName: '',
+        lastName: '',
+        phoneNumber: '',
+        email: '',
+        password: '',
+        age: '',
+        category: ''
+    };
+
+    // Handle the repeated email
+    if (err.code === 11000){
+        errors.email = 'That email is already used';
+        return errors;
+    }
+
+    // Validation errors
+    if (err.message.includes('User validation failed')) {
+        Object.values(err.errors).forEach(({properties}) => {
+            errors[properties.path] = properties.message;
+        });
+    }
+
+    return errors;
+}
+
+// Create a Token
+
+const maxAge = 24 * 60 * 60
+const createToken = (id) => {
+    return jwt.sign({ id } , 'Rent2Play Project', { expiresIn: maxAge });
+}
 
 
 // Register function
 
 const register = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10, function(err, hashedPass){
-        if(err){
-            res.json({
-                error: err
+   
+            let user = new User({
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                phoneNumber: req.body.phoneNumber,
+                email: req.body.email,
+                password: req.body.password,
+                age: req.body.age,
+                category: req.body.category,
+                isAdmin: req.body.isAdmin
             });
-        }
-        let user = new User({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            phoneNumber: req.body.phoneNumber,
-            email: req.body.email,
-            password: hashedPass,
-            age: req.body.age,
-            category: req.body.category,
-            isAdmin:req.body.isAdmin
-        });
-        user.save()
-        .then(user =>{
-            res.json({
-                message: "User added successfully"
-            });
-        }).catch(error => {
-            res.json({
-                message: "An error occured"
-            }); 
-        })
-    });
-}
+            user.save()
+            .then(user =>{
+                res.json({
+                    message: "User added successfully",
+                });
+                const token = createToken(user._id);
+                res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+            }).catch(err => {
+                const errors = handleErrors(err);
+                res.status(401).json({errors});
+            })
+            };
+  
 
 // Login function : The user could login using the email and phone number
 
@@ -50,7 +82,7 @@ const login = (req, res, next) => {
                         error: err
                     })
                 }if (result){
-                    let token = jwt.sign({name: user.firstName}, 'verySecretValue')  // , {expriresIn: '1h'})
+                    let token = jwt.sign({name: user.firstName}, 'verySecretValue' , {expriresIn: '1h'})
                     res.json({
                         message: 'Login Successfull !',
                         token

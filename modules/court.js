@@ -55,8 +55,11 @@ const CourtSchema = new Schema({
     coaches: {
         type: Boolean
     },
-    workingHours: {
-        
+    startingHour: {
+        type: Number
+    },
+    endingHour: {
+        type: Number
     },
 
     // Add in Geolocation
