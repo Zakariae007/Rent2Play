@@ -2,7 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const AuthRoute = require('./routes/auth')
+const CourtRoute = require('./routes/courtApi')
+const CoachRoute = require('./routes/coachApi')
+const ShopRoute = require('./routes/shopApi')
 const cookieParser = require('cookie-parser')
+
 
 // set express app
 const app = express();
@@ -16,7 +20,9 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 // Initialize routes
-app.use('/api',require('./routes/api.js'));
+app.use('/api', CourtRoute);
+app.use ('/api', CoachRoute);
+app.use('/api', ShopRoute);
 
 //Error handling middleware
 app.use(function(err, req, res, next){

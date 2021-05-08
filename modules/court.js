@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const { isEmail } = require('validator');
+
 
 // create Geo Location schema
 const GeoSchema = new Schema({
@@ -21,15 +23,24 @@ const CourtSchema = new Schema({
         required: [true, 'name field is required.']
     },
     courtType: {
-        type: String
-    },
-    available: {
-        type: Boolean,
-        default: false
+        type: String,
+        required: [true, 'court type is required'],
+        enum: ['Wood', 'Clay', 'Artificial grass', 'Artificial clay', 'Carpet', 'Asphalt', 'Concrete', 'Acrylic', 'Other']
     },
     sport: {
         type: String,
-        required: [true, 'sport is required.']
+        required: [true, 'sport is required.'],
+        enum: ['Tennis', 'Squach', 'Padel']
+    },
+    email: {
+        type: String,
+        validate: [isEmail, 'Please enter a valid email']
+    },
+    address: {
+        type: String
+    },
+    city: {
+        type: String
     },
     website: {
         type: String
@@ -39,6 +50,7 @@ const CourtSchema = new Schema({
     },
     type: {
         type: String,
+        enum: ['Indoor', 'Outdoor']
     },
     numberOfCourt: {
         type: Number
@@ -53,7 +65,7 @@ const CourtSchema = new Schema({
         type: Boolean
     },
     coaches: {
-        type: Boolean
+        type: Number
     },
     startingHour: {
         type: Number
@@ -64,7 +76,7 @@ const CourtSchema = new Schema({
 
     // Add in Geolocation
     geometry: GeoSchema
-});
+}, { timestamps: true });
 
 const Court = mongoose.model('court', CourtSchema);
 
