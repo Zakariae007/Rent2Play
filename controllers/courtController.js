@@ -8,6 +8,17 @@ const courtsList = (req, res, next) => {
     });
 }
 
+// Get a court by [City & Sport]
+
+const getCourt = (req, res, next) => {
+    Court.find({
+        city: req.params.city,
+        sport: req.params.sport
+    }).then(function(courts){
+        res.send(courts);
+    })
+}
+
 //Add a new court to the DB
 // Here if we get an error, we gonna call the next middleware (which is the error handling middleware) 
 const addCourt = (req, res, next) => {
@@ -35,6 +46,7 @@ const deleteCourt = (req, res, next) => {
 
 module.exports = {
     courtsList, 
+    getCourt,
     addCourt , 
     updateCourt , 
     deleteCourt

@@ -5,6 +5,7 @@ const AuthRoute = require('./routes/auth')
 const CourtRoute = require('./routes/courtApi')
 const CoachRoute = require('./routes/coachApi')
 const ShopRoute = require('./routes/shopApi')
+const BookingRoute = require('./routes/bookingApi')
 const cookieParser = require('cookie-parser')
 
 
@@ -23,6 +24,7 @@ app.use(cookieParser());
 app.use('/api', CourtRoute);
 app.use ('/api', CoachRoute);
 app.use('/api', ShopRoute);
+app.use('/payment', BookingRoute)
 
 //Error handling middleware
 app.use(function(err, req, res, next){
