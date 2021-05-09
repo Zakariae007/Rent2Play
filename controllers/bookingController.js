@@ -1,6 +1,7 @@
 const Booking = require('../modules/booking');
 
-// Create a booking
+// Create a booking & check availability
+
 const createBooking = (req, res, next) => {
 
     Booking.find({
@@ -47,9 +48,22 @@ const bookingsList = (req, res, next) => {
     Booking.find({}).then(function(bookings){
         res.send(bookings)
     });
-}   
+}
+
+// Cancel a booking
+const cancelBooking = (req, res, next) => {
+    Booking.findByIdAndRemove({_id: req.params.id}).then(function(booking){
+        res.json({
+           message: "The booking was deleted" 
+        });
+    })
+}
+
+// Change the booking info
+
 
 module.exports = {
     createBooking,
-    bookingsList
+    bookingsList,
+    cancelBooking
 }
