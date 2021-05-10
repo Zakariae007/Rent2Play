@@ -13,7 +13,10 @@ const cookieParser = require('cookie-parser')
 const app = express();
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost/rent2play');
+mongoose.connect('mongodb://localhost/rent2play', 
+{ useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true}).then(db => {
+    console.log("Database connected");
+  }).catch(error => console.log("Could not connect to mongo db " + error));
 mongoose.Promise = global.Promise;
 
 // Middleware
