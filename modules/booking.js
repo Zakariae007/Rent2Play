@@ -11,10 +11,12 @@ const BookingSchema = new Schema ({
         ref : 'user'
     },
     bookingStartTime: {
-        type: Date
+        type: Date,
+        required: [true , "Please provide a start time for your booking"]
     },
     bookingEndTime: {
-        type: Date
+        type: Date,
+        required: [true , "Please provide an end time for your booking"]
     },
     isActive: {
         type: Boolean,

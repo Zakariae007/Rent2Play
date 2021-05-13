@@ -1,5 +1,6 @@
 const Booking = require('../modules/booking');
 
+
 // Create a booking & check availability
 
 const createBooking = (req, res, next) => {
@@ -39,7 +40,8 @@ const createBooking = (req, res, next) => {
                 });
             });
         }     
-    }).catch(err => console.log);
+    })
+    .catch(err => console.log);
 }
 
 

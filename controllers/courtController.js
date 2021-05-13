@@ -1,5 +1,37 @@
 const Court = require('../modules/court');
 
+
+// Function to handle Errors 
+const handleErrors = (err) => {
+    console.log(err.message, err.code);
+    let errors = {
+        name: '',
+        courtType: '',
+        sport: '',
+        website: '',
+        email: '',
+        address : '',
+        phoneNumber: '',
+        type: '',
+        numberOfCourt: '',
+        price: '',
+        onlineBooking: '',
+        rentingInventory: '',
+        coaches: '',
+        startingHour: '',
+        endingHour: ''
+    };
+
+    if (err.message.includes('court validation failed')){
+        Object.values(err.errors).forEach(({properties}) => {
+            errors[properties.path] = properties.message;
+        });
+    }
+    
+    return errors;
+    
+}
+
 // Get the list of Courts
 
 const courtsList = (req, res, next) => {
@@ -22,10 +54,13 @@ const getCourt = (req, res, next) => {
 //Add a new court to the DB
 // Here if we get an error, we gonna call the next middleware (which is the error handling middleware) 
 const addCourt = (req, res, next) => {
-    // This mongoose method will create an instance of Ninja and save it and the DB
+    // This mongoose method will create an instance of Court and save it and the DB
     Court.create(req.body).then(function(court){
         res.send(court);
-    }).catch(next);
+    }).catch(err => {
+        const errors = handleErrors(err);
+        res.status(401).json({errors});
+    });
 }
 
 // Update a court in the DB

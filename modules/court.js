@@ -37,26 +37,31 @@ const CourtSchema = new Schema({
         validate: [isEmail, 'Please enter a valid email']
     },
     address: {
-        type: String
+        type: String,
+        required: [true, 'The address is required']
     },
     city: {
-        type: String
+        type: String,
+        required: [true, 'The city is required']
     },
     website: {
         type: String
     },
     phoneNumber: {
-        type: Number
+        type: Number,
+        required: [true, 'The phone number is required']
     },
     type: {
         type: String,
+        required: [true, 'The type is required'],
         enum: ['Indoor', 'Outdoor']
     },
     numberOfCourt: {
         type: Number
     },
     price: {
-        type: Number
+        type: Number,
+        required: [true, 'The price is required']
     },
     onlineBooking: {
         type: Boolean
