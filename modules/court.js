@@ -72,10 +72,10 @@ const CourtSchema = new Schema({
     coaches: {
         type: Number
     },
-    startingHour: {
+    startHour: {
         type: Date
     },
-    endingHour: {
+    endHour: {
         type: Date
     },
 

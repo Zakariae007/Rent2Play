@@ -43,10 +43,42 @@ const courtsList = (req, res, next) => {
 // Get a court by [City & Sport]
 
 const getCourt = (req, res, next) => {
-    Court.find({
-        city: req.params.city,
-        sport: req.params.sport
-    }).then(function(courts){
+    // Court.find({
+    //     city: req.params.city,
+    //     sport: req.params.sport,
+
+    // })
+    Court.aggregate([
+        {
+            $match: { "city": req.params.city, "sport":req.params.sport}
+        },
+        {
+            $lookup:
+            {
+                from: "bookings",
+                localField: "_id",
+                foreignField: "court",
+               as: "booking_docs"
+            }
+        },
+        {
+            $project: {
+                "city":1,
+                "sport":1,
+                "booking_docs":{
+
+                    $filter:{
+                        input: "$booking_docs",
+                        as : "booking_doc",
+                        cond: {"$eq": [ {$toString:"$$booking_doc.bookingStartTime"} , req.params.bookingStartTime],
+                                "$eq":[{$toString:"$$booking_doc.bookingEndTime"} , req.params.bookingEndTime ]        
+                        }
+                    }
+                }
+            }
+        }
+    ])
+    .then(function(courts){
         res.send(courts);
     })
 }
