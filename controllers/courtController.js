@@ -43,14 +43,15 @@ const courtsList = (req, res, next) => {
 // Get a court by [City & Sport]
 
 const getCourt = (req, res, next) => {
-    // Court.find({
-    //     city: req.params.city,
-    //     sport: req.params.sport,
-
-    // })
+    
+    
     Court.aggregate([
         {
-            $match: { "city": req.params.city, "sport":req.params.sport}
+            $match: 
+            { 
+                "city": req.params.city,
+                "sport":req.params.sport
+            }
         },
         {
             $lookup:
@@ -62,24 +63,41 @@ const getCourt = (req, res, next) => {
             }
         },
         {
-            $project: {
+            $project: 
+            {
                 "city":1,
                 "sport":1,
-                "booking_docs":{
-
-                    $filter:{
+                "booking_docs":
+                {
+                    $filter:
+                    {
                         input: "$booking_docs",
                         as : "booking_doc",
-                        cond: {"$eq": [ {$toString:"$$booking_doc.bookingStartTime"} , req.params.bookingStartTime],
-                                "$eq":[{$toString:"$$booking_doc.bookingEndTime"} , req.params.bookingEndTime ]        
-                        }
+                        cond:
+                        
+                            {
+                               $and: 
+                                [
+                                    {$lt: ["$$booking_doc.bookingStartTime"  , {$dateFromString: { dateString: req.params.bookingEndTime}}]},
+                                    {$gt: ["$$booking_doc.bookingEndTime" , {$dateFromString: { dateString: req.params.bookingStartTime}}]}
+                                ]}
+                            }   
+                        
                     }
                 }
-            }
-        }
+            },
+        
     ])
     .then(function(courts){
-        res.send(courts);
+        var listofcourts = {};
+        courts.forEach(function(court,index){
+            if( Object.entries(court.booking_docs).length === 0 ){
+                var varname = "courtid" + index
+                listofcourts[varname] = court._id;
+            }
+        })
+        res.send(listofcourts);
+
     })
 }
 

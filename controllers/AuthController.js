@@ -43,29 +43,28 @@ const createToken = (id) => {
 
 const register = (req, res, next) => {
    
-            let user = new User({
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                phoneNumber: req.body.phoneNumber,
-                email: req.body.email,
-                password: req.body.password,
-                age: req.body.age,
-                category: req.body.category,
-                isAdmin: req.body.isAdmin
+    let user = new User({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        phoneNumber: req.body.phoneNumber,
+        email: req.body.email,
+        password: req.body.password,
+        age: req.body.age,
+        category: req.body.category,
+        isAdmin: req.body.isAdmin
+    });
+        user.save()
+        .then(user =>{
+            res.json({
+                message: "User added successfully",
             });
-            user.save()
-            .then(user =>{
-                res.json({
-                    message: "User added successfully",
-                });
-                const token = createToken(user._id);
-                res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-            }).catch(err => {
-                const errors = handleErrors(err);
-                res.status(401).json({errors});
-            })
-            };
-  
+        const token = createToken(user._id);
+        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+        }).catch(err => {
+            const errors = handleErrors(err);
+            res.status(401).json({errors});
+        });
+};
 
 // Login function : The user could login using the email and phone number
 
