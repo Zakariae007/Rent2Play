@@ -74,19 +74,17 @@ const getCourt = (req, res, next) => {
                         input: "$booking_docs",
                         as : "booking_doc",
                         cond:
-                        
-                            {
-                               $and: 
-                                [
-                                    {$lt: ["$$booking_doc.bookingStartTime"  , {$dateFromString: { dateString: req.params.bookingEndTime}}]},
-                                    {$gt: ["$$booking_doc.bookingEndTime" , {$dateFromString: { dateString: req.params.bookingStartTime}}]}
-                                ]}
-                            }   
-                        
-                    }
+                        {
+                            $and: 
+                            [
+                                {$lt: ["$$booking_doc.bookingStartTime"  , {$dateFromString: { dateString: req.params.bookingEndTime}}]},
+                                {$gt: ["$$booking_doc.bookingEndTime" , {$dateFromString: { dateString: req.params.bookingStartTime}}]}
+                            ]
+                        }
+                    }    
                 }
-            },
-        
+            }
+        },
     ])
     .then(function(courts){
         var listofcourts = {};

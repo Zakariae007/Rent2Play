@@ -8,7 +8,7 @@ const createBooking = (req, res, next) => {
     Booking.find({
         
         $and: [
-        {court: req.body.court},
+        { court: req.body.court},
         {
             $or :[
             {$and : [
@@ -43,7 +43,6 @@ const createBooking = (req, res, next) => {
     })
     .catch(err => console.log);
 }
-
 
 // Get all bookings
 const bookingsList = (req, res, next) => {
@@ -107,7 +106,6 @@ const modifyBooking = (req, res, next) => {
     })
 }
     
-
 module.exports = {
     createBooking,
     bookingsList,

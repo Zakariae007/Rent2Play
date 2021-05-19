@@ -13,7 +13,7 @@ const cookieParser = require('cookie-parser')
 const app = express();
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost/rent2play', 
+mongoose.connect('mongodb://admin:rent2play12345@cluster0-shard-00-00.fgyir.mongodb.net:27017,cluster0-shard-00-01.fgyir.mongodb.net:27017,cluster0-shard-00-02.fgyir.mongodb.net:27017/test?replicaSet=atlas-cnkwgs-shard-0&ssl=true&authSource=admin', 
 { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true}).then(db => {
     console.log("Database connected");
   }).catch(error => console.log("Could not connect to mongo db " + error));
