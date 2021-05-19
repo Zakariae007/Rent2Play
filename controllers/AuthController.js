@@ -1,5 +1,6 @@
 const User = require('../modules/user');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt')
 
 // Handle Errors 
 
@@ -95,8 +96,10 @@ const login = (req, res, next) => {
         }else {
             res.json({
                 message: 'No user found'
+                
             })
         }
+        return;
     })
 }
 
