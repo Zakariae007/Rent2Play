@@ -7,27 +7,27 @@ const CoachRoute = require('./routes/coachApi')
 const ShopRoute = require('./routes/shopApi')
 const BookingRoute = require('./routes/bookingApi')
 const cookieParser = require('cookie-parser');
-//const corsMiddleWare = require('./cors')
+const cors = require('cors')
 
 
 // set express app
 const app = express();
 
-//app.use(corsMiddleWare);
+app.use(cors());
 
- app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    if (req.method === 'OPTIONS'){
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-        return res.status(200).json({})
-    }
-    next();
- });
+// app.use((req, res, next) => {
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+//     res.setHeader('Access-Control-Allow-Credentials', true);
+//     if (req.method === 'OPTIONS'){
+//         res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+//         return res.status(200).json({})
+//     }
+//     next();
+//  });
 
 // Connect to MongoDB
-mongoose.connect('mongodb://admin:rent2play12345@cluster0-shard-00-00.fgyir.mongodb.net:27017,cluster0-shard-00-01.fgyir.mongodb.net:27017,cluster0-shard-00-02.fgyir.mongodb.net:27017/test?replicaSet=atlas-cnkwgs-shard-0&ssl=true&authSource=admin', 
+mongoose.connect('mongodb://localhost/rent2play', 
 { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true}).then(db => {
     console.log("Database connected");
   }).catch(error => console.log("Could not connect to mongo db " + error));
@@ -48,7 +48,7 @@ app.use('/api', AuthRoute);
 app.use(function(err, req, res, next){
     res.status(404).send(
         {error: err.message}
-    ) 
+    ).end();
 })
 
 // Listen for request

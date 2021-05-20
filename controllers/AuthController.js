@@ -60,11 +60,12 @@ const register = (req, res, next) => {
                 message: "User added successfully",
             });
         const token = createToken(user._id);
-        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+        //res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
         }).catch(err => {
+            console.log(err);
             const errors = handleErrors(err);
-            res.status(401).json({errors});
-        });
+            res.status(401).json({errors}); 
+        });  
 };
 
 // Login function : The user could login using the email and phone number
@@ -72,6 +73,7 @@ const register = (req, res, next) => {
 const login = (req, res, next) => {
     var username = req.body.username;
     var password = req.body.password;
+    
 
     User.findOne({$or: [{email: username}, {phoneNumber: username}]})
     .then(user => {
@@ -81,26 +83,25 @@ const login = (req, res, next) => {
                     res.json({
                         error: err
                     })
+                    console.log('err');
                 }if (result){
                     let token = jwt.sign({name: user.firstName}, 'verySecretValue')
-                    res.json({
-                        message: 'Login Successfull !',
-                        token
-                    })
+                    const message = 'Login Successfull !'
+                    console.log(message);
+                    
                 }else{
-                    res.json({
-                        message: 'Password did not match ! '
-                    })
+                    const message = 'Password did not match ! '
+                    console.log(message);
+                  
                 }
             })
         }else {
-            res.json({
-                message: 'No user found'
-                
-            })
+            const message = 'No user found'
+            console.log(message);
+            
         }
-        return;
     })
+    return message;
 }
 
 module.exports = {
