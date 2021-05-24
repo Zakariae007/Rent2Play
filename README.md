@@ -1,5 +1,5 @@
 # Rent2Play
 
-INSTALL
+INSTALL:
 
 npm install bcrypt
