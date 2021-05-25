@@ -8,23 +8,16 @@ const ShopRoute = require('./routes/shopApi')
 const BookingRoute = require('./routes/bookingApi')
 const cookieParser = require('cookie-parser');
 const cors = require('cors')
+const dotenv = require('dotenv');
 
+// Load env
+dotenv.config({path : './config.env'});
 
 // set express app
 const app = express();
 
 app.use(cors());
 
-// app.use((req, res, next) => {
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-//     res.setHeader('Access-Control-Allow-Credentials', true);
-//     if (req.method === 'OPTIONS'){
-//         res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-//         return res.status(200).json({})
-//     }
-//     next();
-//  });
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost/rent2play', 
@@ -51,11 +44,22 @@ app.use(function(err, req, res, next){
     ).end();
 })
 
-// Listen for request
-app.listen(process.env.port || 4000, function(){
-    console.log("Now listening for requests");
-});
+//Handle production
+if(process.env.NODE_ENV === 'production'){
+    // Set static folder
+    app.use(express.static(__dirname + '/public/'));
 
+    // Hnadle SPA
+    app.get(/.*/, (req,res) => {
+        res.sendFile(__dirname + '/public/index.html')
+    })
+}
+
+// Listen for request
+const port = process.env.port || 4000;
+app.listen(port, function(){
+    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${port} `);
+});
 
 
 
