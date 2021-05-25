@@ -81,27 +81,32 @@ const login = (req, res, next) => {
             bcrypt.compare(password, user.password, function(err, result){
                 if (err) {
                     res.json({
+                        title: 'Server error',
                         error: err
                     })
                     console.log('err');
                 }if (result){
                     let token = jwt.sign({name: user.firstName}, 'verySecretValue')
-                    const message = 'Login Successfull !'
-                    console.log(message);
+                    return res.status(200).json({
+                        title: 'Login successfull'
+                    })
                     
                 }else{
-                    const message = 'Password did not match ! '
-                    console.log(message);
-                  
+                    return res.status(401).json({
+                        title: 'password wrong',
+                        error: 'invalid credentials'
+                    })
                 }
             })
-        }else {
-            const message = 'No user found'
-            console.log(message);
-            
+        }
+        else {
+            return res.status(401).json({
+                title: 'password wrong',
+                error: 'invalid credentials'
+            })   
         }
     })
-    return message;
+
 }
 
 module.exports = {

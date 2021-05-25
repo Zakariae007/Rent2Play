@@ -67,6 +67,11 @@ const getCourt = (req, res, next) => {
             {
                 "city":1,
                 "sport":1,
+                "name":1,
+                "address": 1,
+                "type":1,
+                "courtType":1,
+                "price":1,
                 "booking_docs":
                 {
                     $filter:
@@ -90,8 +95,23 @@ const getCourt = (req, res, next) => {
         var listofcourts = {};
         courts.forEach(function(court,index){
             if( Object.entries(court.booking_docs).length === 0 ){
-                var varname = "courtid" + index
-                listofcourts[varname] = court._id;
+                var id = "courtid" + index
+                var name = "courtName"
+                var city = "courtCity"
+                var sport = "sport" 
+                var address = "address"
+                var type = "Type"
+                var courtType = "courtType"
+                var price = "price"
+                listofcourts[id] = court._id;
+                listofcourts[name] = court.name;
+                listofcourts[city] = court.city;
+                listofcourts[sport] = court.sport;
+                listofcourts[address] = court.address;
+                listofcourts[type] = court.type;
+                listofcourts[courtType] = court.courtType;
+                listofcourts[price] = court.price;
+
             }
         })
         res.send(listofcourts);
