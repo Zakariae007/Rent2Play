@@ -1,14 +1,15 @@
 {
-  "name": "node",
+  "name": "Rent2Play",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node index",
-    "server": "nodemon index"
+    "server": "nodemon index",
+    "client": "npm run serve --prefix client"
   },
   "keywords": [],
-  "author": "",
+  "author": "Zakariae Barakat",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
